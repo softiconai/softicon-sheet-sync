@@ -1,0 +1,228 @@
+.alss {
+    max-width: 1100px;
+}
+
+.alss-title {
+    margin-bottom: 12px;
+}
+
+.alss-card {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+}
+
+.alss-card h2 {
+    margin-top: 0;
+}
+
+.alss-wizard {
+    max-width: 760px;
+}
+
+.alss-steps {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    max-width: 810px;
+    flex-wrap: wrap;
+}
+
+.alss-steps li {
+    flex: 1;
+    min-width: 140px;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #f0f0f1;
+    color: #50575e;
+    font-weight: 500;
+}
+
+.alss-steps li span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: #c3c4c7;
+    color: #fff;
+    font-size: 12px;
+}
+
+.alss-steps li.is-current {
+    background: #2271b1;
+    color: #fff;
+}
+
+.alss-steps li.is-current span {
+    background: #fff;
+    color: #2271b1;
+}
+
+.alss-steps li.is-done span {
+    background: #00a32a;
+}
+
+.alss-howto {
+    margin-left: 1.4em;
+}
+
+.alss-howto li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.alss-copy-row {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-left: 6px;
+}
+
+.alss-copy-row code {
+    word-break: break-all;
+}
+
+.alss-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.alss-buttons > span {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.alss-buttons > span[hidden] {
+    display: none;
+}
+
+.alss-inline {
+    display: inline;
+    margin: 0;
+}
+
+.alss-progress {
+    margin: 12px 0;
+}
+
+.alss-progress-bar {
+    height: 10px;
+    border-radius: 5px;
+    background: #f0f0f1;
+    overflow: hidden;
+}
+
+.alss-progress-bar span {
+    display: block;
+    height: 100%;
+    background: #2271b1;
+    transition: width 0.4s ease;
+}
+
+.alss-progress[data-status="error"] .alss-progress-bar span {
+    background: #d63638;
+}
+
+.alss-progress[data-status="error"] .alss-progress-text {
+    color: #d63638;
+}
+
+.alss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+}
+
+.alss-grid .alss-card {
+    margin: 16px 0 0;
+}
+
+.alss-stat {
+    border-top: 4px solid #c3c4c7;
+}
+
+.alss-stat.is-ok {
+    border-top-color: #00a32a;
+}
+
+.alss-stat.is-off {
+    border-top-color: #dba617;
+}
+
+.alss-stat h3 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: #50575e;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.alss-stat p {
+    margin: 0;
+    word-break: break-word;
+}
+
+.alss-check {
+    display: block;
+    margin: 6px 0;
+}
+
+.alss-code {
+    margin: 16px 0;
+    border: 1px solid #dcdcde;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.alss-code-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f6f7f7;
+    border-bottom: 1px solid #dcdcde;
+}
+
+.alss-code textarea {
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    font-size: 12px;
+    background: #fff;
+}
+
+.alss-script-state {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #fcf9e8;
+    color: #6b5800;
+}
+
+.alss-script-state.is-ok {
+    background: #edfaef;
+    color: #00661b;
+}
+
+.alss-log td:first-child {
+    white-space: nowrap;
+}
+
+.alss-log tr.is-error td {
+    color: #b32d2e;
+}
+
+.alss-danger {
+    border-color: #f0c5c5;
+}
