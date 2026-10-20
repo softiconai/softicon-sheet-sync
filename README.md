@@ -20,7 +20,7 @@ Two-way sync between WooCommerce products and a Google Sheet. Edit stock, prices
 
 ## Installation
 
-1. Copy this folder to `wp-content/plugins/softicon-sheet-sync` and activate the plugin.
+1. Copy this folder to `wp-content/plugins/softicon-sheet-sync-for-woocommerce` and activate the plugin.
 2. Go to **WooCommerce > Sheet Sync** and follow the setup wizard.
 
 No build step and no Composer dependencies: the plugin calls the Google Sheets REST API directly.

@@ -43,24 +43,24 @@ class rest {
         $signature = strtolower( (string) $request->get_header('x_alss_signature') );
 
         if ( ! $timestamp || ! $signature || ! preg_match( '/^[a-f0-9-]{16,64}$/i', $nonce ) || abs( time() - $timestamp ) > 5 * MINUTE_IN_SECONDS ) {
-            return new \WP_Error( 'alss_expired', __( 'The request is missing its signature or has expired.', 'softicon-sheet-sync' ), array( 'status' => 401 ) );
+            return new \WP_Error( 'alss_expired', __( 'The request is missing its signature or has expired.', 'softicon-sheet-sync-for-woocommerce' ), array( 'status' => 401 ) );
         }
 
         $signed   = implode( '.', array( $timestamp, $nonce, $request->get_route(), $request->get_body() ) );
         $expected = hash_hmac( 'sha256', $signed, settings::secret() );
         if ( ! hash_equals( $expected, $signature ) ) {
-            return new \WP_Error( 'alss_signature', __( 'Invalid signature. Copy the Apps Script code again from WooCommerce > Sheet Sync.', 'softicon-sheet-sync' ), array( 'status' => 401 ) );
+            return new \WP_Error( 'alss_signature', __( 'Invalid signature. Copy the Apps Script code again from WooCommerce > Sheet Sync.', 'softicon-sheet-sync-for-woocommerce' ), array( 'status' => 401 ) );
         }
 
         // checked after the signature so unsigned requests can't fill the transient table
         $used = 'alss_nonce_' . md5( $nonce );
         if ( get_transient( $used ) ) {
-            return new \WP_Error( 'alss_replay', __( 'This request was already received.', 'softicon-sheet-sync' ), array( 'status' => 409 ) );
+            return new \WP_Error( 'alss_replay', __( 'This request was already received.', 'softicon-sheet-sync-for-woocommerce' ), array( 'status' => 409 ) );
         }
         set_transient( $used, 1, 6 * MINUTE_IN_SECONDS );
 
         if ( ! settings::is_connected() ) {
-            return new \WP_Error( 'alss_not_connected', __( 'Google Sheets is not connected in WooCommerce.', 'softicon-sheet-sync' ), array( 'status' => 409 ) );
+            return new \WP_Error( 'alss_not_connected', __( 'Google Sheets is not connected in WooCommerce.', 'softicon-sheet-sync-for-woocommerce' ), array( 'status' => 409 ) );
         }
         return true;
     }
@@ -73,7 +73,7 @@ class rest {
 
         $id_index = array_search( 'id', $keys, true );
         if ( false === $id_index ) {
-            return new \WP_Error( 'alss_no_id', __( 'The ID column is missing. Use Sheet Sync > Fetch from WooCommerce to rebuild the sheet.', 'softicon-sheet-sync' ), array( 'status' => 400 ) );
+            return new \WP_Error( 'alss_no_id', __( 'The ID column is missing. Use Sheet Sync > Fetch from WooCommerce to rebuild the sheet.', 'softicon-sheet-sync-for-woocommerce' ), array( 'status' => 400 ) );
         }
 
         $apply = $this->columns_to_apply( $keys, isset( $data['cols'] ) ? $data['cols'] : null );
@@ -88,7 +88,7 @@ class rest {
 
             if ( ! $id ) {
                 if ( implode( '', array_map( 'strval', $cells ) ) !== '' ) {
-                    $out[] = array( 'row' => $line, 'status' => 'error', 'message' => '✗ ' . __( 'No product ID. New products can only be added in WooCommerce.', 'softicon-sheet-sync' ) );
+                    $out[] = array( 'row' => $line, 'status' => 'error', 'message' => '✗ ' . __( 'No product ID. New products can only be added in WooCommerce.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 continue;
             }
@@ -96,7 +96,7 @@ class rest {
             $product = wc_get_product( $id );
             if ( ! product_row::exportable( $product ) ) {
                 /* translators: %d: product id */
-                $out[] = array( 'row' => $line, 'status' => 'error', 'message' => '✗ ' . sprintf( __( 'Product #%d was not found.', 'softicon-sheet-sync' ), $id ) );
+                $out[] = array( 'row' => $line, 'status' => 'error', 'message' => '✗ ' . sprintf( __( 'Product #%d was not found.', 'softicon-sheet-sync-for-woocommerce' ), $id ) );
                 continue;
             }
 
@@ -116,19 +116,19 @@ class rest {
                 'row'     => $line,
                 'status'  => $result['errors'] ? 'error' : 'ok',
                 /* translators: %s: time */
-                'message' => $result['errors'] ? '✗ ' . implode( ' ', $result['errors'] ) : '✓ ' . sprintf( __( 'Synced %s', 'softicon-sheet-sync' ), $time ),
+                'message' => $result['errors'] ? '✗ ' . implode( ' ', $result['errors'] ) : '✓ ' . sprintf( __( 'Synced %s', 'softicon-sheet-sync-for-woocommerce' ), $time ),
                 'values'  => $values,
             );
 
             if ( $result['errors'] ) {
                 /* translators: 1: product id, 2: error */
-                log::error( sprintf( __( 'Product #%1$d: %2$s', 'softicon-sheet-sync' ), $id, implode( ' ', $result['errors'] ) ), 'sheet' );
+                log::error( sprintf( __( 'Product #%1$d: %2$s', 'softicon-sheet-sync-for-woocommerce' ), $id, implode( ' ', $result['errors'] ) ), 'sheet' );
             }
         }
 
         if ( $saved ) {
             /* translators: %d: number of products */
-            log::add( sprintf( _n( 'Updated %d product from Google Sheets.', 'Updated %d products from Google Sheets.', $saved, 'softicon-sheet-sync' ), $saved ), 'sheet' );
+            log::add( sprintf( _n( 'Updated %d product from Google Sheets.', 'Updated %d products from Google Sheets.', $saved, 'softicon-sheet-sync-for-woocommerce' ), $saved ), 'sheet' );
         }
         update_option( 'alss_script_seen', time(), false );
 
@@ -158,14 +158,14 @@ class rest {
         if ( is_wp_error( $result ) ) {
             return new \WP_Error( $result->get_error_code(), $result->get_error_message(), array( 'status' => 409 ) );
         }
-        return rest_ensure_response( array( 'message' => __( 'Fetching products from WooCommerce. The sheet updates in a minute.', 'softicon-sheet-sync' ) ) );
+        return rest_ensure_response( array( 'message' => __( 'Fetching products from WooCommerce. The sheet updates in a minute.', 'softicon-sheet-sync-for-woocommerce' ) ) );
     }
 
     public function ping( $request ) {
         $data = $request->get_json_params();
         update_option( 'alss_script_seen', time(), false );
         update_option( 'alss_script_version', isset( $data['version'] ) ? sanitize_text_field( $data['version'] ) : '', false );
-        log::add( __( 'Instant sync turned on from the Apps Script.', 'softicon-sheet-sync' ), 'sheet' );
+        log::add( __( 'Instant sync turned on from the Apps Script.', 'softicon-sheet-sync-for-woocommerce' ), 'sheet' );
 
         return rest_ensure_response( array( 'ok' => true ) );
     }
@@ -184,7 +184,7 @@ class rest {
             'script' => array(
                 'seen' => $seen,
                 /* translators: %s: human readable time difference */
-                'text' => $seen ? sprintf( __( 'Connected, last request %s ago', 'softicon-sheet-sync' ), human_time_diff( $seen ) ) : '',
+                'text' => $seen ? sprintf( __( 'Connected, last request %s ago', 'softicon-sheet-sync-for-woocommerce' ), human_time_diff( $seen ) ) : '',
             ),
         ) );
     }

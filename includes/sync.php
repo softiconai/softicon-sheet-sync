@@ -34,13 +34,13 @@ class sync {
 
     public static function start_export( $source = 'admin' ) {
         if ( ! settings::is_connected() ) {
-            return new \WP_Error( 'alss_not_connected', __( 'Connect Google Sheets first.', 'softicon-sheet-sync' ) );
+            return new \WP_Error( 'alss_not_connected', __( 'Connect Google Sheets first.', 'softicon-sheet-sync-for-woocommerce' ) );
         }
 
         // a stuck run (fatal error, killed worker) is restarted after 15 minutes
         $state = self::export_state();
         if ( self::exporting() && time() - $state['updated'] < 15 * MINUTE_IN_SECONDS ) {
-            return new \WP_Error( 'alss_busy', __( 'A sync to Google Sheets is already running.', 'softicon-sheet-sync' ) );
+            return new \WP_Error( 'alss_busy', __( 'A sync to Google Sheets is already running.', 'softicon-sheet-sync-for-woocommerce' ) );
         }
 
         $ids = wc_get_products( array(
@@ -121,7 +121,7 @@ class sync {
             $state['status'] = 'done';
             update_option( 'alss_export', $state, false );
             /* translators: %d: number of rows */
-            log::add( sprintf( __( 'Sent %d rows to Google Sheets.', 'softicon-sheet-sync' ), $state['row'] - 2 ), $state['source'] );
+            log::add( sprintf( __( 'Sent %d rows to Google Sheets.', 'softicon-sheet-sync-for-woocommerce' ), $state['row'] - 2 ), $state['source'] );
         } catch ( \Exception $e ) {
             $state['status']  = 'error';
             $state['message'] = self::message( $e );
@@ -164,7 +164,7 @@ class sync {
                 return (int) $item['properties']['gridProperties']['rowCount'];
             }
         }
-        throw new \Exception( esc_html__( 'The sheet tab was not found. Check the tab name in the settings.', 'softicon-sheet-sync' ) );
+        throw new \Exception( esc_html__( 'The sheet tab was not found. Check the tab name in the settings.', 'softicon-sheet-sync-for-woocommerce' ) );
     }
 
     private static function grow_grid( $rows ) {
@@ -436,7 +436,7 @@ class sync {
 
     public static function start_pull( $then_export = false ) {
         if ( ! settings::is_connected() ) {
-            return new \WP_Error( 'alss_not_connected', __( 'Connect Google Sheets first.', 'softicon-sheet-sync' ) );
+            return new \WP_Error( 'alss_not_connected', __( 'Connect Google Sheets first.', 'softicon-sheet-sync-for-woocommerce' ) );
         }
         as_enqueue_async_action( 'alss_pull', array( array( 'then_export' => (bool) $then_export ) ), self::GROUP );
         return true;
@@ -491,7 +491,7 @@ class sync {
                 if ( $result['errors'] ) {
                     self::note( $id, '✗ ' . implode( ' ', $result['errors'] ) );
                     /* translators: 1: product id, 2: error */
-                    log::error( sprintf( __( 'Product #%1$d: %2$s', 'softicon-sheet-sync' ), $id, implode( ' ', $result['errors'] ) ), $source );
+                    log::error( sprintf( __( 'Product #%1$d: %2$s', 'softicon-sheet-sync-for-woocommerce' ), $id, implode( ' ', $result['errors'] ) ), $source );
                 }
 
                 // remember the sheet values so the next run doesn't see the same edit again, the push then writes the real values back
@@ -502,7 +502,7 @@ class sync {
 
         if ( $applied ) {
             /* translators: %d: number of products */
-            log::add( sprintf( _n( 'Updated %d product from Google Sheets.', 'Updated %d products from Google Sheets.', $applied, 'softicon-sheet-sync' ), $applied ), $source );
+            log::add( sprintf( _n( 'Updated %d product from Google Sheets.', 'Updated %d products from Google Sheets.', $applied, 'softicon-sheet-sync-for-woocommerce' ), $applied ), $source );
         }
 
         if ( $more ) {

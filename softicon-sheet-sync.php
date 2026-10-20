@@ -11,7 +11,7 @@
 * Author URI: https://profiles.wordpress.org/softiconai/
 * License: GPLv3 or later
 * License URI: https://www.gnu.org/licenses/gpl-3.0.html
-* Text Domain: softicon-sheet-sync
+* Text Domain: softicon-sheet-sync-for-woocommerce
 * Domain Path: /languages
 * WC requires at least: 8.0
 * WC tested up to: 10.3

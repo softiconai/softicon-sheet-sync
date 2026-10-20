@@ -164,11 +164,11 @@ class product_row {
         switch ( $key ) {
             case 'name':
                 if ( $is_variation ) {
-                    return new \WP_Error( 'alss_invalid', __( 'Variation names come from the parent product, edit the parent row.', 'softicon-sheet-sync' ) );
+                    return new \WP_Error( 'alss_invalid', __( 'Variation names come from the parent product, edit the parent row.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 $value = sanitize_text_field( $value );
                 if ( '' === $value ) {
-                    return new \WP_Error( 'alss_invalid', __( 'Name cannot be empty.', 'softicon-sheet-sync' ) );
+                    return new \WP_Error( 'alss_invalid', __( 'Name cannot be empty.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 $product->set_name( $value );
                 break;
@@ -188,14 +188,14 @@ class product_row {
             case 'stock':
                 if ( is_numeric( $value ) ) {
                     if ( $product->is_type('external') ) {
-                        return new \WP_Error( 'alss_invalid', __( 'External products have no stock quantity.', 'softicon-sheet-sync' ) );
+                        return new \WP_Error( 'alss_invalid', __( 'External products have no stock quantity.', 'softicon-sheet-sync-for-woocommerce' ) );
                     }
                     $product->set_manage_stock( true );
                     $product->set_stock_quantity( wc_stock_amount( $value ) );
                     break;
                 }
                 if ( ! isset( columns::STOCK[ $value ] ) ) {
-                    return new \WP_Error( 'alss_invalid', __( 'Stock must be a number, or In stock, Out of stock or On backorder.', 'softicon-sheet-sync' ) );
+                    return new \WP_Error( 'alss_invalid', __( 'Stock must be a number, or In stock, Out of stock or On backorder.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 $product->set_manage_stock( false );
                 $product->set_stock_status( $value );
@@ -206,14 +206,14 @@ class product_row {
                 if ( ! in_array( $value, $allowed, true ) ) {
                     $labels = array_intersect_key( columns::STATUS, array_flip( $allowed ) );
                     /* translators: %s: allowed status names */
-                    return new \WP_Error( 'alss_invalid', sprintf( __( 'Status must be one of: %s.', 'softicon-sheet-sync' ), implode( ', ', $labels ) ) );
+                    return new \WP_Error( 'alss_invalid', sprintf( __( 'Status must be one of: %s.', 'softicon-sheet-sync-for-woocommerce' ), implode( ', ', $labels ) ) );
                 }
                 $product->set_status( $value );
                 break;
 
             case 'categories':
                 if ( $is_variation ) {
-                    return new \WP_Error( 'alss_invalid', __( 'Variations have no categories, edit the parent row.', 'softicon-sheet-sync' ) );
+                    return new \WP_Error( 'alss_invalid', __( 'Variations have no categories, edit the parent row.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 $ids     = array();
                 $missing = array();
@@ -227,14 +227,14 @@ class product_row {
                 }
                 if ( $missing ) {
                     /* translators: %s: category names */
-                    return new \WP_Error( 'alss_invalid', sprintf( __( 'Unknown categories: %s. Create them in WooCommerce first.', 'softicon-sheet-sync' ), implode( ', ', $missing ) ) );
+                    return new \WP_Error( 'alss_invalid', sprintf( __( 'Unknown categories: %s. Create them in WooCommerce first.', 'softicon-sheet-sync-for-woocommerce' ), implode( ', ', $missing ) ) );
                 }
                 $product->set_category_ids( $ids );
                 break;
 
             case 'short_description':
                 if ( $is_variation ) {
-                    return new \WP_Error( 'alss_invalid', __( 'Variations have no short description, use the Description column.', 'softicon-sheet-sync' ) );
+                    return new \WP_Error( 'alss_invalid', __( 'Variations have no short description, use the Description column.', 'softicon-sheet-sync-for-woocommerce' ) );
                 }
                 $product->set_short_description( wp_kses_post( $value ) );
                 break;
@@ -244,7 +244,7 @@ class product_row {
                 break;
 
             default:
-                return new \WP_Error( 'alss_invalid', __( 'This column is read only.', 'softicon-sheet-sync' ) );
+                return new \WP_Error( 'alss_invalid', __( 'This column is read only.', 'softicon-sheet-sync-for-woocommerce' ) );
         }
 
         return true;
@@ -252,7 +252,7 @@ class product_row {
 
     private static function check_prices( $product, $pending ) {
         if ( ! self::has_price( $product ) ) {
-            return __( 'Variable and grouped products have no price of their own, edit the variation rows.', 'softicon-sheet-sync' );
+            return __( 'Variable and grouped products have no price of their own, edit the variation rows.', 'softicon-sheet-sync-for-woocommerce' );
         }
 
         $regular = isset( $pending['regular_price'] ) ? $pending['regular_price'] : columns::normalize( 'regular_price', $product->get_regular_price('edit') );
@@ -260,11 +260,11 @@ class product_row {
 
         foreach ( array( $regular, $sale ) as $price ) {
             if ( '' !== $price && ( ! is_numeric( $price ) || $price < 0 ) ) {
-                return __( 'Prices must be positive numbers.', 'softicon-sheet-sync' );
+                return __( 'Prices must be positive numbers.', 'softicon-sheet-sync-for-woocommerce' );
             }
         }
         if ( '' !== $sale && ( '' === $regular || (float) $sale >= (float) $regular ) ) {
-            return __( 'Sale price must be lower than the regular price.', 'softicon-sheet-sync' );
+            return __( 'Sale price must be lower than the regular price.', 'softicon-sheet-sync-for-woocommerce' );
         }
         return '';
     }
