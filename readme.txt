@@ -12,6 +12,8 @@ Two-way sync between WooCommerce and Google Sheets. Edit stock, prices and SKUs 
 
 == Description ==
 
+https://www.youtube.com/watch?v=_3l4LeW_afo
+
 Updating stock or prices one product at a time is slow. SoftIcon Sheet Sync puts every product and variation in a Google Sheet, one row each. Edit the sheet and WooCommerce updates within seconds. Change something in WooCommerce, or sell something, and the sheet updates too.
 
 Everything is free. There is no premium version, no product limit and no locked features.
@@ -45,6 +47,10 @@ Edits made in the sheet reach your store through an Apps Script you paste into t
    2. Share your Google Sheet with the service account email as an Editor and paste the sheet URL.
    3. Send your products to the sheet.
    4. Paste the Apps Script into the sheet (Extensions > Apps Script) and run `alssInstall` once to turn on instant sync.
+
+Watch the whole setup step by step:
+
+https://www.youtube.com/watch?v=ybi61qsvgq8
 
 == Frequently Asked Questions ==
 
